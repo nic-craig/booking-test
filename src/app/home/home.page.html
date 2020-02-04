@@ -24,7 +24,7 @@
             <small>You will need to use the details you would use at Motorpoint Arena.</small>
           </p>
 
-          <form (ngSubmit)="submitLoginForm()">
+          <form (ngSubmit)="submitLoginForm()" *ngIf="!isLoggedIn"> 
             <ion-list lines="full" class="ion-no-margin ion-no-padding">
               <ion-item>
                 <ion-label position="stacked">Email Address <ion-text color="danger">*</ion-text></ion-label>
@@ -41,6 +41,14 @@
               <ion-button expand="block" type="submit" class="ion-no-margin">Sign In</ion-button>
             </div>
           </form>
+
+          <div *ngIf="isLoggedIn" class="ion-text-center">
+            <ion-text color="light">
+              Welcome back, [USERNAME].
+            </ion-text>
+            <ion-button expand="block" class="ion-no-margin ion-margin-top">My Profile</ion-button>
+            <ion-button expand="block" color="danger" class="ion-no-margin ion-margin-top">Sign Out</ion-button>
+          </div>
 
         </div>
 
