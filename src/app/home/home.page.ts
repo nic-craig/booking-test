@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +7,25 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  emailInput: string;
+  passwordInput: string;
 
-  constructor() {}
+  constructor(private loadingController: LoadingController) {}
+
+
+  submitLoginForm() {
+    console.log("Form Submitted!");
+    this.createLoadingController();
+  }
+
+  async createLoadingController()
+  {
+    const loading = await this.loadingController.create({
+      message:'Checking Details..',
+      spinner: 'dots'
+    });
+
+    loading.present();
+  }
 
 }

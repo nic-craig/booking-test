@@ -1,14 +1,60 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-toolbar color="dark">
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="9">
+        <ion-title class="ion-no-padding">Motorpoint Arena Nottingham Accessibility Booking</ion-title>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum elementum eros ac commodo. Nullam sagittis auctor purus. Nullam in nisi quam. Aenean vel leo magna. Sed iaculis arcu ut aliquet faucibus. Suspendisse at scelerisque est. Sed quis dignissim dolor. Sed turpis diam, ultricies eget ullamcorper vitae, consectetur nec eros.</p>
+           
+        <p>Aliquam venenatis leo lorem, nec tempus lectus semper ac. Ut mattis molestie lectus. Donec mauris justo, sodales in rutrum nec, fermentum vel metus. Donec euismod mi eu rhoncus pulvinar. Aliquam ac nisl a ligula iaculis interdum ut eget leo. Mauris eget augue tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum velit dui, volutpat id pulvinar ut, auctor quis libero. Vestibulum porttitor rutrum placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lorem tellus, pellentesque et tempor at, gravida ut dui. Aenean in placerat leo. Praesent ac ex ex.</p>
+
+        <p>Vivamus mollis lacus nisi, non ullamcorper justo tincidunt non. Praesent malesuada lacus vitae massa dapibus, ac volutpat velit maximus. Integer quis ipsum sed purus iaculis eleifend eget tincidunt mi. Suspendisse tempor metus sed nunc hendrerit porttitor. Donec pharetra sed ipsum in tincidunt. Aliquam ac fermentum ante, at ornare urna. Aenean nibh tortor, aliquet ac finibus in, volutpat eu diam. Praesent eget velit eget erat cursus interdum. Curabitur fringilla rutrum metus quis condimentum. Phasellus venenatis sem sed lacus efficitur gravida. Donec pellentesque justo ac pretium condimentum.</p>
+      </ion-col>
+      <ion-col size="3">
+        <div class="login_container__widget">
+          <p>
+            <ion-text color="light">
+              <h3>Existing member?</h3>
+            </ion-text>
+            <small>You will need to use the details you would use at Motorpoint Arena.</small>
+          </p>
+
+          <form (ngSubmit)="submitLoginForm()">
+            <ion-list lines="full" class="ion-no-margin ion-no-padding">
+              <ion-item>
+                <ion-label position="stacked">Email Address <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input name="email" required type="text" [(ngModel)]="emailInput"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Password <ion-text color="danger">*</ion-text></ion-label>
+                <ion-input name="password" required type="password" [(ngModel)]="passwordInput"></ion-input>
+              </ion-item>
+            </ion-list>
+
+            <div class="ion-padding-top">
+              <ion-button expand="block" type="submit" class="ion-no-margin">Sign In</ion-button>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="new_member_container__widget">
+          <p>
+            <ion-text color="dark">
+              <h3>Not an Access Card Member?</h3>
+            </ion-text>
+            <small>No Problem. Find out how to get one!</small>
+          </p>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
