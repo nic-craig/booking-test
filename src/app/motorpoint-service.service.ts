@@ -128,7 +128,8 @@ export class MotorpointServiceService {
       ],
       "objectName": "myCustomer",
       "get": [
-        "Memberships"
+        "Memberships",
+        "Contacts"
       ]
     };
     var body = JSON.stringify(bodyData);
