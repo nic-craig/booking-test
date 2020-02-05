@@ -29,6 +29,7 @@
     "axios": "^0.19.2",
     "axios-cookiejar-support": "^0.5.1",
     "core-js": "^2.5.4",
+    "ngx-cookie-service": "^2.3.0",
     "rxjs": "~6.5.1",
     "stream-browserify": "^2.0.2",
     "timers-browserify": "^2.0.11",

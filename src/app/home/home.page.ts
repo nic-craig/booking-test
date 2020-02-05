@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { MotorpointServiceService } from '../motorpoint-service.service';
 import { LocalStorageService } from '../local-storage.service';
+import { CookieService } from 'ngx-cookie-service';
 
 import xml2js from 'xml2js';
 let parseString = xml2js.parseString;
@@ -21,7 +22,8 @@ export class HomePage {
     private loadingController: LoadingController,
     private mpService: MotorpointServiceService,
     private toastController: ToastController,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private cookieService: CookieService
     ) {}
 
 
@@ -29,6 +31,27 @@ export class HomePage {
     this.createLoadingController();
 
     this.mpService.requestLogin(this.emailInput, this.passwordInput).then((loginResponseObject) => {
+
+      const parentThis = this;
+      parseString(loginResponseObject, function (err, result) {
+        if(result.response.result[0].status == 0)
+        {
+          console.log(result.response.data[0].customer_id[0])
+          parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
+            parentThis.isLoggedIn = true;
+            parentThis.loadingController.dismiss();
+          })
+        }
+      });
+      
+    })
+
+  }
+
+  submitLoginFormAxios() {
+    this.createLoadingController();
+
+    this.mpService.requestLoginAxios(this.emailInput, this.passwordInput).then((loginResponseObject) => {
 
       const parentThis = this;
       parseString(loginResponseObject, function (err, result) {
@@ -71,6 +94,10 @@ export class HomePage {
     });
 
     return await loading.present();
+  }
+
+  async changeCookie() {
+    console.log(this.cookieService.get('session'));
   }
 
 }

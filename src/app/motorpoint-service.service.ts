@@ -69,6 +69,7 @@ export class MotorpointServiceService {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {
+      responseData.headers.forEach(function(val, key) { console.log(key + ' -> ' + val); });
       return responseData.text();
     })
     .then((responseDataObject) => {
@@ -77,6 +78,42 @@ export class MotorpointServiceService {
     
 
   }
+
+  async requestLoginAxios(username: string, password: string) {
+    /**
+     * Request authentication from the AudienceView API
+     * map the result to return only the results that we need
+     *
+     * @param username username
+     * @param password password
+     * @returns promise
+     */
+
+   const requestUrl = this.url + '/app/WebAPI/session/authenticateUser';
+
+   const formData: FormData = new FormData();
+   formData.append('userid', username);
+   formData.append('password', password);
+
+   const bodyForm = 'userid=' + username + '&password=' + password +'&GET=customer_id';
+   
+   let axiosConfig = {
+      headers: {
+          "Content-Type":"application/x-www-form-urlencoded;charset=utf-8",
+          "Accept":"/*/"
+      },
+      withCredentials: true
+    };
+
+    return await axios.post(requestUrl, bodyForm, axiosConfig).then((responseData) => {
+      return responseData;
+    })
+    .then((responseDataObject) => {
+      return responseDataObject.data;
+    })
+
+  }
+
 
   // Version 2 when AV is upgraded 
   requestLoginv2(username: string, password: string) {
