@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { MotorpointServiceService } from '../motorpoint-service.service';
-var parseString = require('xml2js').parseString;
+import { LocalStorageService } from '../local-storage.service';
+
+import xml2js from 'xml2js';
+let parseString = xml2js.parseString;
 
 @Component({
   selector: 'app-home',
@@ -17,7 +20,8 @@ export class HomePage {
   constructor(
     private loadingController: LoadingController,
     private mpService: MotorpointServiceService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private localStorageService: LocalStorageService
     ) {}
 
 
@@ -31,7 +35,10 @@ export class HomePage {
         if(result.response.result[0].status == 0)
         {
           console.log(result.response.data[0].customer_id[0])
-          parentThis.loadingController.dismiss();
+          parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
+            parentThis.isLoggedIn = true;
+            parentThis.loadingController.dismiss();
+          })
         }
       });
       
@@ -40,7 +47,12 @@ export class HomePage {
   }
 
   getCustomerDetails() {
-    //this.mpService.getCustomerDetails()
+    this.localStorageService.getCustomerId().then((customerId) => {
+      this.mpService.getCustomerDetails(customerId).then((customerObject) => {
+        console.log(customerObject);
+      })
+    })
+    
   }
 
   async presentToast(messageText) {
