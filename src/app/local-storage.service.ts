@@ -26,4 +26,10 @@ export class LocalStorageService {
       return port;
     })
   }
+
+  async setPort() {
+    return this.storage.set("port", "8060").then((port) => {
+      return port;
+    })
+  }
 }

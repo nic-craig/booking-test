@@ -26,7 +26,7 @@ export class MotorpointServiceService {
 
   constructor(private http: HttpClient, private storage: Storage, private localStorage: LocalStorageService) {
     this.localStorage.getPort().then((port) => {
-      if(port !== undefined)
+      if(port !== undefined && port !== null)
       {
         this.url = 'https://motorpointarenanottingham.com:'+port;
       }
@@ -61,7 +61,8 @@ export class MotorpointServiceService {
       method: 'POST',
       body: bodyForm,
       credentials: 'include',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      referrerPolicy: 'origin-when-cross-origin'
     })
     .then((responseData) => {
       responseData.headers.forEach(function(val, key) { console.log(key + ' -> ' + val); });

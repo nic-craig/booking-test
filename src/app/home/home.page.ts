@@ -25,9 +25,11 @@ export class HomePage {
     private localStorageService: LocalStorageService,
     private cookieService: CookieService
     ) {
-      if(this.cookieService.get("port").length < 1)
+      console.log("Port: ", this.cookieService.get("port").length);
+      if(this.cookieService.get("port").length == 0)
       {
         this.cookieService.set("port", "8060");
+        this.localStorageService.setPort();
       }
     }
 
