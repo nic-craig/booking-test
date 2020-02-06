@@ -19,4 +19,11 @@ export class LocalStorageService {
       return customerId;
     })
   }
+
+
+  async getPort() {
+    return this.storage.get("port").then((port) => {
+      return port;
+    })
+  }
 }

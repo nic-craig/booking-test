@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+
 import axios from 'axios';
+import { LocalStorageService } from './local-storage.service';
 
 /*
 //const axiosCookieJarSupport = require('axios-cookiejar-support').default;
@@ -19,10 +21,17 @@ const cookieJar = new tough.CookieJar();
   providedIn: 'root'
 })
 export class MotorpointServiceService {
-  url = 'https://motorpointarenanottingham.com:8060';
+  url;
+  port;
 
-  constructor(private http: HttpClient, private storage: Storage) {
-
+  constructor(private http: HttpClient, private storage: Storage, private localStorage: LocalStorageService) {
+    this.localStorage.getPort().then((port) => {
+      if(port)
+      {
+        this.url = 'https://motorpointarenanottingham.com:'+port;
+      }
+    })
+    
   }
 
 
@@ -66,6 +75,7 @@ export class MotorpointServiceService {
       method: 'POST',
       body: bodyForm,
       credentials: 'include',
+      mode: 'cors',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {
@@ -171,10 +181,11 @@ export class MotorpointServiceService {
     };
     var body = JSON.stringify(bodyData);
 
-    /*
+    
     let axiosConfig = {
       headers: {
           "Content-Type":"application/json;charset=utf-8",
+          "Accept":"*/*"
       },
       withCredentials: true,
       crossdomain: true,
@@ -187,9 +198,9 @@ export class MotorpointServiceService {
     .then((responseDataObject) => {
       return responseDataObject.data;
     })
-    */
-
     
+
+    /*
     return fetch(requestUrl, {
       method: 'POST',
       body: body,
@@ -199,7 +210,7 @@ export class MotorpointServiceService {
     .then((responseData) => {
       return responseData;
     });
-    
+    */
 
   }
 

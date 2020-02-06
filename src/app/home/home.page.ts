@@ -24,7 +24,12 @@ export class HomePage {
     private toastController: ToastController,
     private localStorageService: LocalStorageService,
     private cookieService: CookieService
-    ) {}
+    ) {
+      if(this.cookieService.get("port").length < 1)
+      {
+        this.cookieService.set("port", "8060");
+      }
+    }
 
 
   submitLoginForm() {
@@ -97,7 +102,7 @@ export class HomePage {
   }
 
   async changeCookie() {
-    console.log(this.cookieService.get('session'));
+    console.log(this.cookieService.getAll());
   }
 
 }
