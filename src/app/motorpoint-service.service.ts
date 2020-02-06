@@ -56,29 +56,11 @@ export class MotorpointServiceService {
 
    const bodyForm = 'userid=' + username + '&password=' + password +'&GET=customer_id';
 
-   /*
-   let axiosConfig = {
-      headers: {
-          "Content-Type":"application/x-www-form-urlencoded;charset=utf-8",
-      },
-      withCredentials: true,
-      credentials: 'same-origin'
-    };
-
-    return await axios.post(requestUrl, bodyForm, axiosConfig).then((responseData) => {
-      return responseData;
-    })
-    .then((responseDataObject) => {
-      return responseDataObject.data;
-    })
-    */
-
   
    return fetch(requestUrl, {
       method: 'POST',
       body: bodyForm,
       credentials: 'include',
-      mode: 'cors',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {

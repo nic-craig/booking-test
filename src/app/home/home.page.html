@@ -42,24 +42,6 @@
             </div>
           </form>
 
-          <form (ngSubmit)="submitLoginFormAxios()" *ngIf="!isLoggedIn"> 
-            <ion-list lines="full" class="ion-no-margin ion-no-padding">
-              <ion-item>
-                <ion-label position="stacked">Email Address <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input name="email" required type="text" [(ngModel)]="emailInput"></ion-input>
-              </ion-item>
-
-              <ion-item>
-                <ion-label position="stacked">Password <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input name="password" required type="password" [(ngModel)]="passwordInput"></ion-input>
-              </ion-item>
-            </ion-list>
-
-            <div class="ion-padding-top">
-              <ion-button expand="block" type="submit" class="ion-no-margin">Sign In</ion-button>
-            </div>
-          </form>
-
           <div *ngIf="isLoggedIn" class="ion-text-center">
             <ion-text color="light">
               Welcome back, [USERNAME].
