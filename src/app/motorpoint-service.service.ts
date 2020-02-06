@@ -26,9 +26,12 @@ export class MotorpointServiceService {
 
   constructor(private http: HttpClient, private storage: Storage, private localStorage: LocalStorageService) {
     this.localStorage.getPort().then((port) => {
-      if(port)
+      if(port !== undefined)
       {
         this.url = 'https://motorpointarenanottingham.com:'+port;
+      }
+      else {
+        this.url = 'https://motorpointarenanottingham.com';
       }
     })
     
