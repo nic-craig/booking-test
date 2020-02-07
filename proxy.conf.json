@@ -1,0 +1,8 @@
+{
+    "/app/*": {
+    "target": "https://motorpointarenanottingham.com:8060",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

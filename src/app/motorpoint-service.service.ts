@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { map } from 'rxjs/operators'; 
 import { LocalStorageService } from './local-storage.service';
@@ -50,7 +50,7 @@ export class MotorpointServiceService {
      * @returns promise
      */
 
-   const requestUrl = this.url + '/app/WebAPI/session/authenticateUser';
+   const requestUrl = '/app/WebAPI/session/authenticateUser';
 
    const formData: FormData = new FormData();
    formData.append('userid', username);
@@ -63,7 +63,6 @@ export class MotorpointServiceService {
       method: 'POST',
       body: bodyForm,
       credentials: 'include',
-      mode: 'no-cors',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {
@@ -86,7 +85,9 @@ export class MotorpointServiceService {
     formData.append('password', password);
     formData.append('GET', 'customer_id');
 
-    return this.http.post(requestUrl, formData, { responseType: 'text', withCredentials: true });
+    return this.http.post(requestUrl, formData, { observe: 'response', responseType: 'text', withCredentials: true }).subscribe((resp: HttpResponse<any>) => {
+      console.log(resp.headers)
+    });
   }
 
   async requestLoginAxios(username: string, password: string) {
@@ -160,7 +161,7 @@ export class MotorpointServiceService {
   }
 
   async getCustomerDetails(customerId) {
-    const requestUrl = this.url + '/app/WebAPI/v2/customer';
+    const requestUrl = '/app/WebAPI/v2/customer';
 
     const bodyData = {
       "actions": [
@@ -180,33 +181,12 @@ export class MotorpointServiceService {
       ]
     };
     var body = JSON.stringify(bodyData);
-
-    /*
-    let axiosConfig = {
-      headers: {
-          "Content-Type":"application/json;charset=utf-8",
-      },
-      withCredentials: true,
-      crossdomain: true,
-      credentials: 'same-origin'
-    };
-
-    return await axios.post(requestUrl, body, axiosConfig).then((responseData) => {
-      return responseData;
-    })
-    .then((responseDataObject) => {
-      return responseDataObject.data;
-    })
-    */
-    
-
     
     return fetch(requestUrl, {
       method: 'POST',
       body: body,
       credentials: 'include',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'application/json;;charset=UTF-8', 'Accept': 'application/json'}
+      headers: {'Content-Type': 'application/json;charset=UTF-8', 'Accept': 'application/json'}
     })
     .then((responseData) => {
       return responseData;

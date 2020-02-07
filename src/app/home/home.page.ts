@@ -15,7 +15,7 @@ let parseString = xml2js.parseString;
 export class HomePage {
   emailInput: string = "peter.parker@test.com";
   passwordInput: string = "avenger1";
-  isLoggedIn: boolean = false;
+  isLoggedIn: boolean = true;
   loading;
 
   constructor(
@@ -37,7 +37,7 @@ export class HomePage {
   async submitLoginForm() {
     this.createLoadingController();
 
-    (await this.mpService.requestLoginHttp(this.emailInput, this.passwordInput)).toPromise().then((loginResponseObject) => {
+    await this.mpService.requestLogin(this.emailInput, this.passwordInput).then((loginResponseObject) => {
       console.log(loginResponseObject);
 
       const parentThis = this;

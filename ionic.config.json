@@ -1,5 +1,11 @@
 {
   "name": "DisabledBooking",
   "integrations": {},
-  "type": "angular"
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/app",
+      "proxyUrl": "https://motorpointarenanottingham.com:8060/app"
+    }
+  ]
 }
