@@ -31,6 +31,13 @@ export class HomePage {
         this.cookieService.set("port", "8060");
         this.localStorageService.setPort();
       }
+
+      this.localStorageService.getLoggedIn().then((authenticatedStatus) => {
+        if(authenticatedStatus)
+        {
+          this.isLoggedIn = true;
+        }
+      });
     }
 
 
@@ -48,27 +55,7 @@ export class HomePage {
           parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
             parentThis.isLoggedIn = true;
             parentThis.loadingController.dismiss();
-          })
-        }
-      });
-      
-    })
-
-  }
-
-  submitLoginFormAxios() {
-    this.createLoadingController();
-
-    this.mpService.requestLoginAxios(this.emailInput, this.passwordInput).then((loginResponseObject) => {
-
-      const parentThis = this;
-      parseString(loginResponseObject, function (err, result) {
-        if(result.response.result[0].status == 0)
-        {
-          console.log(result.response.data[0].customer_id[0])
-          parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
-            parentThis.isLoggedIn = true;
-            parentThis.loadingController.dismiss();
+            parentThis.localStorageService.setIsLoggedIn(true);
           })
         }
       });
@@ -78,9 +65,11 @@ export class HomePage {
   }
 
   getCustomerDetails() {
+    this.createLoadingController();
     this.localStorageService.getCustomerId().then((customerId) => {
       this.mpService.getCustomerDetails(customerId).then((customerObject) => {
         console.log(customerObject);
+        this.loadingController.dismiss();
       })
     })
     

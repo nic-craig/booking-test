@@ -32,4 +32,16 @@ export class LocalStorageService {
       return port;
     })
   }
+
+  async setIsLoggedIn(status: boolean = false) {
+    return this.storage.set("isAuthenticated", status).then((status) => {
+      return status;
+    })
+  }
+
+  getLoggedIn() {
+    return this.storage.get("isAuthenticated").then((authenticatedStatus) => {
+      return authenticatedStatus;
+    })
+  }
 }
