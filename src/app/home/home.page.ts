@@ -15,7 +15,7 @@ let parseString = xml2js.parseString;
 export class HomePage {
   emailInput: string = "peter.parker@test.com";
   passwordInput: string = "avenger1";
-  isLoggedIn: boolean = true;
+  isLoggedIn: boolean = false;
   loading;
 
   constructor(
