@@ -34,10 +34,11 @@ export class HomePage {
     }
 
 
-  submitLoginForm() {
+  async submitLoginForm() {
     this.createLoadingController();
 
-    this.mpService.requestLogin(this.emailInput, this.passwordInput).then((loginResponseObject) => {
+    (await this.mpService.requestLoginHttp(this.emailInput, this.passwordInput)).toPromise().then((loginResponseObject) => {
+      console.log(loginResponseObject);
 
       const parentThis = this;
       parseString(loginResponseObject, function (err, result) {
@@ -104,7 +105,7 @@ export class HomePage {
   }
 
   async changeCookie() {
-    console.log(this.cookieService.getAll());
+    this.mpService.showToughCookies();
   }
 
 }

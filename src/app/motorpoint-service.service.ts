@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-
-import axios from 'axios';
+import { map } from 'rxjs/operators'; 
 import { LocalStorageService } from './local-storage.service';
+import xml2js from 'xml2js';
+let parseString = xml2js.parseString;
 
-/*
-//const axiosCookieJarSupport = require('axios-cookiejar-support').default;
-import axiosCookieJarSupport from 'axios-cookiejar-support';
-//const tough = require('tough-cookie');
-import tough from 'tough-cookie';
+declare var require: any;
 
-axios.defaults.withCredentials = true
+const axios = require('axios');
+axios.default;
+const axiosCookieJarSupport = require('axios-cookiejar-support');
+axiosCookieJarSupport.default;
+const tough = require('tough-cookie');
+
 axiosCookieJarSupport(axios);
+axios.defaults.jar = new tough.CookieJar();
 
 const cookieJar = new tough.CookieJar();
-*/
 
 @Injectable({
   providedIn: 'root'
@@ -61,11 +63,11 @@ export class MotorpointServiceService {
       method: 'POST',
       body: bodyForm,
       credentials: 'include',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      referrerPolicy: 'origin-when-cross-origin'
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {
-      responseData.headers.forEach(function(val, key) { console.log(key + ' -> ' + val); });
+      responseData.headers.forEach(console.log);
       return responseData.text();
     })
     .then((responseDataObject) => {
@@ -73,6 +75,18 @@ export class MotorpointServiceService {
     })
     
 
+  }
+
+  async requestLoginHttp(username: string, password: string) {
+
+    const requestUrl = this.url + '/app/WebAPI/session/authenticateUser';
+
+    const formData: FormData = new FormData();
+    formData.append('userid', username);
+    formData.append('password', password);
+    formData.append('GET', 'customer_id');
+
+    return this.http.post(requestUrl, formData, { responseType: 'text', withCredentials: true });
   }
 
   async requestLoginAxios(username: string, password: string) {
@@ -85,23 +99,23 @@ export class MotorpointServiceService {
      * @returns promise
      */
 
-   const requestUrl = this.url + '/app/WebAPI/session/authenticateUser';
+    const requestUrl = this.url + '/app/WebAPI/session/authenticateUser';
 
-   const formData: FormData = new FormData();
-   formData.append('userid', username);
-   formData.append('password', password);
+    const formData: FormData = new FormData();
+    formData.append('userid', username);
+    formData.append('password', password);
 
-   const bodyForm = 'userid=' + username + '&password=' + password +'&GET=customer_id';
-   
-   let axiosConfig = {
-      headers: {
-          "Content-Type":"application/x-www-form-urlencoded;charset=utf-8",
-          "Accept":"/*/"
-      },
-      withCredentials: true
+    const bodyForm = 'userid=' + username + '&password=' + password +'&GET=customer_id';
+    
+    let axiosConfig = {
+      withCredentials: true,
+      credentials: 'same-origin',
+      mode: 'no-cors',
+      jar: cookieJar
     };
 
     return await axios.post(requestUrl, bodyForm, axiosConfig).then((responseData) => {
+      console.log(responseData);
       return responseData;
     })
     .then((responseDataObject) => {
@@ -167,11 +181,10 @@ export class MotorpointServiceService {
     };
     var body = JSON.stringify(bodyData);
 
-    
+    /*
     let axiosConfig = {
       headers: {
           "Content-Type":"application/json;charset=utf-8",
-          "Accept":"*/*"
       },
       withCredentials: true,
       crossdomain: true,
@@ -184,20 +197,82 @@ export class MotorpointServiceService {
     .then((responseDataObject) => {
       return responseDataObject.data;
     })
+    */
     
 
-    /*
+    
     return fetch(requestUrl, {
       method: 'POST',
       body: body,
       credentials: 'include',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json;;charset=UTF-8', 'Accept': 'application/json'}
     })
     .then((responseData) => {
       return responseData;
     });
+    
+
+  }
+
+  async getCustomerDetailsAxios(customerId) {
+    const requestUrl = this.url + '/app/WebAPI/v2/customer';
+
+    const bodyData = {
+      "actions": [
+        {
+          "method": "load",
+          "params": {
+            "Customer": {
+              "customer_id": customerId
+            }
+          }
+        }
+      ],
+      "objectName": "myCustomer",
+      "get": [
+        "Memberships",
+        "Contacts"
+      ]
+    };
+    var body = JSON.stringify(bodyData);
+
+    
+    let axiosConfig = {
+      headers: {
+          "Content-Type":"application/json;charset=utf-8",
+          "Accept":"*/*"
+      },
+      mode: 'no-cors',
+      withCredentials: true,
+      credentials: 'same-origin',
+      jar: cookieJar
+    };
+
+    return await axios.post(requestUrl, body, axiosConfig).then((responseData) => {
+      return responseData;
+    })
+    .then((responseDataObject) => {
+      return responseDataObject.data;
+    })
+    
+
+  }
+
+
+  showToughCookies() {
+
+    /*
+    cookieJar.setCookie('test=1234; path=/; domain=localhost.test', 'http://localhost.test', function(err, cookie) {
+      console.log(cookie);
+      console.log(err);
+    });
     */
 
+
+    cookieJar.getCookies('https://motorpointarenanottingham.com',function(err,cookies) {
+      console.log(cookies);
+    });
   }
 
 
