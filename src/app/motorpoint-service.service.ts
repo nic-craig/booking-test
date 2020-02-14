@@ -34,7 +34,7 @@ export class MotorpointServiceService {
      * @returns promise
      */
 
-   const requestUrl = '/app/WebAPI/session/authenticateUser';
+   const requestUrl = 'https://avapi.nmarena.co.uk/app/WebAPI/session/authenticateUser';
 
    const formData: FormData = new FormData();
    formData.append('userid', username);
@@ -71,7 +71,7 @@ export class MotorpointServiceService {
      * @returns promise
      */
 
-   const requestUrl = this.url + '/app/WebAPI/v2/session/authenticateUser';
+   const requestUrl = 'https://avapi.nmarena.co.uk/app/WebAPI/v2/session/authenticateUser';
 
    const formData: FormData = new FormData();
    formData.append('userid', username);
@@ -95,7 +95,42 @@ export class MotorpointServiceService {
   }
 
   async getCustomerDetails(customerId) {
-    const requestUrl = '/app/WebAPI/v2/customer';
+    const requestUrl = 'https://avapi.nmarena.co.uk/app/WebAPI/v2/customer';
+
+    const bodyData = {
+      "actions": [
+        {
+          "method": "load",
+          "params": {
+            "Customer": {
+              "customer_id": customerId
+            }
+          }
+        }
+      ],
+      "objectName": "myCustomer",
+      "get": [
+        "Customer::default_contact_id",
+        "Contacts"
+      ]
+    };
+    var body = JSON.stringify(bodyData);
+    
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: body,
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json;charset=UTF-8', 'Accept': 'application/json'}
+    })
+    .then((responseData) => {
+      return responseData;
+    });
+    
+
+  }
+
+  async getCustomerMemberships(customerId) {
+    const requestUrl = 'https://avapi.nmarena.co.uk/app/WebAPI/v2/customer';
 
     const bodyData = {
       "actions": [
@@ -127,6 +162,13 @@ export class MotorpointServiceService {
     });
     
 
+  };
+
+  checkValidAuth(object) {
+    if(object.errorCode == 6)
+    {
+      console.log("Not working!!");
+    }
   }
 
   showToughCookies() {

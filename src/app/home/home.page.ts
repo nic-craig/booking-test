@@ -17,6 +17,7 @@ export class HomePage {
   passwordInput: string = "avenger1";
   isLoggedIn: boolean = false;
   loading;
+  fullname = "";
 
   constructor(
     private loadingController: LoadingController,
@@ -36,6 +37,7 @@ export class HomePage {
         if(authenticatedStatus)
         {
           this.isLoggedIn = true;
+          this.showCustomerDetails();
         }
       });
     }
@@ -55,8 +57,14 @@ export class HomePage {
           parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
             parentThis.isLoggedIn = true;
             parentThis.loadingController.dismiss();
-            parentThis.localStorageService.setIsLoggedIn(true);
+            //parentThis.localStorageService.setIsLoggedIn(true);
           })
+        }
+        
+        if(result.response.result[0].status == 6)
+        {
+          parentThis.loadingController.dismiss();
+          parentThis.presentToast("Your login doesn't appear to be correct - please try again.");
         }
       });
       
@@ -64,10 +72,28 @@ export class HomePage {
 
   }
 
-  getCustomerDetails() {
+  showCustomerDetails() {
+    
+  }
+
+  async getCustomerDetails() {
     this.createLoadingController();
     this.localStorageService.getCustomerId().then((customerId) => {
       this.mpService.getCustomerDetails(customerId).then((customerObject) => {
+        this.mpService.checkValidAuth(customerObject);
+        const customerContactId = customerObject['data']['Customer::default_contact_id']['standard'];
+        console.log(customerContactId);
+				//$json['data']['Contacts'][$customerContactId]['first_name']['standard'];
+        this.loadingController.dismiss();
+      })
+    })
+    
+  }
+
+  getCustomerMemberships() {
+    this.createLoadingController();
+    this.localStorageService.getCustomerId().then((customerId) => {
+      this.mpService.getCustomerMemberships(customerId).then((customerObject) => {
         console.log(customerObject);
         this.loadingController.dismiss();
       })
