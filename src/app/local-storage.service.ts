@@ -44,4 +44,11 @@ export class LocalStorageService {
       return authenticatedStatus;
     })
   }
+
+  clearUser() {
+    return this.storage.set("isAuthenticated", false).then((authenticatedStatus) => {
+      this.saveCustomerId("");
+      return authenticatedStatus;
+    })
+  }
 }

@@ -50,7 +50,9 @@ export class MotorpointServiceService {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then((responseData) => {
-      responseData.headers.forEach(console.log);
+      responseData.headers.forEach((header) => {
+        console.log(header);
+      });
       return responseData.text();
     })
     .then((responseDataObject) => {
@@ -123,8 +125,11 @@ export class MotorpointServiceService {
       headers: {'Content-Type': 'application/json;charset=UTF-8', 'Accept': 'application/json'}
     })
     .then((responseData) => {
-      return responseData;
-    });
+      return responseData.json();
+    })
+    .then((responseDataObject) => {
+      return responseDataObject;
+    })
     
 
   }
@@ -158,8 +163,11 @@ export class MotorpointServiceService {
       headers: {'Content-Type': 'application/json;charset=UTF-8', 'Accept': 'application/json'}
     })
     .then((responseData) => {
-      return responseData;
-    });
+      return responseData.json();
+    })
+    .then((responseDataObject) => {
+      return responseDataObject;
+    })
     
 
   };
@@ -167,9 +175,14 @@ export class MotorpointServiceService {
   checkValidAuth(object) {
     if(object.errorCode == 6)
     {
-      console.log("Not working!!");
+      this.clearAndLogout();
     }
   }
+
+  clearAndLogout() {
+    this.localStorage.clearUser();
+  }
+
 
   showToughCookies() {
 

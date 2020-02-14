@@ -18,6 +18,8 @@ export class HomePage {
   isLoggedIn: boolean = false;
   loading;
   fullname = "";
+  isGettingUserDetails = true;
+  firstName = "[USERNAME]";
 
   constructor(
     private loadingController: LoadingController,
@@ -37,7 +39,7 @@ export class HomePage {
         if(authenticatedStatus)
         {
           this.isLoggedIn = true;
-          this.showCustomerDetails();
+          this.getCustomerDetails();
         }
       });
     }
@@ -47,17 +49,16 @@ export class HomePage {
     this.createLoadingController();
 
     await this.mpService.requestLogin(this.emailInput, this.passwordInput).then((loginResponseObject) => {
-      console.log(loginResponseObject);
 
       const parentThis = this;
       parseString(loginResponseObject, function (err, result) {
         if(result.response.result[0].status == 0)
         {
-          console.log(result.response.data[0].customer_id[0])
           parentThis.localStorageService.saveCustomerId(result.response.data[0].customer_id[0]).then((response) => {
             parentThis.isLoggedIn = true;
+            parentThis.isGettingUserDetails = true;
             parentThis.loadingController.dismiss();
-            //parentThis.localStorageService.setIsLoggedIn(true);
+            parentThis.localStorageService.setIsLoggedIn(true);
           })
         }
         
@@ -65,6 +66,12 @@ export class HomePage {
         {
           parentThis.loadingController.dismiss();
           parentThis.presentToast("Your login doesn't appear to be correct - please try again.");
+        }
+
+        if(result.response.result[0].status == 99)
+        {
+          parentThis.loadingController.dismiss();
+          parentThis.presentToast("Your login has expired - please try again.");
         }
       });
       
@@ -77,14 +84,13 @@ export class HomePage {
   }
 
   async getCustomerDetails() {
-    this.createLoadingController();
     this.localStorageService.getCustomerId().then((customerId) => {
       this.mpService.getCustomerDetails(customerId).then((customerObject) => {
         this.mpService.checkValidAuth(customerObject);
         const customerContactId = customerObject['data']['Customer::default_contact_id']['standard'];
-        console.log(customerContactId);
-				//$json['data']['Contacts'][$customerContactId]['first_name']['standard'];
-        this.loadingController.dismiss();
+        //$json['data']['Contacts'][$customerContactId]['first_name']['standard'];
+        this.firstName = customerObject['data']['Contacts'][customerContactId]['first_name']['standard'];
+        this.isGettingUserDetails = false;
       })
     })
     
