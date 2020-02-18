@@ -20,6 +20,7 @@ export class HomePage {
   fullname = "";
   isGettingUserDetails = true;
   firstName = "[USERNAME]";
+  existingMembershipsTotal = 0;
 
   constructor(
     private loadingController: LoadingController,
@@ -86,7 +87,7 @@ export class HomePage {
   async getCustomerDetails() {
     this.localStorageService.getCustomerId().then((customerId) => {
       this.mpService.getCustomerDetails(customerId).then((customerObject) => {
-        this.mpService.checkValidAuth(customerObject);
+        this.checkExpiredToken(customerObject);
         const customerContactId = customerObject['data']['Customer::default_contact_id']['standard'];
         //$json['data']['Contacts'][$customerContactId]['first_name']['standard'];
         this.firstName = customerObject['data']['Contacts'][customerContactId]['first_name']['standard'];
@@ -115,6 +116,16 @@ export class HomePage {
     toast.present();
   }
 
+  async checkExpiredToken(object)
+  {
+    const requestResponse = this.mpService.checkValidAuth(object);
+    if(!requestResponse) {
+      this.localStorageService.clearUser();
+      this.isLoggedIn = false;
+      this.presentToast("Session expired - please login again");
+    }
+  }
+  
   async createLoadingController()
   {
     const loading = await this.loadingController.create({

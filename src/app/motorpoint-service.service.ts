@@ -113,6 +113,7 @@ export class MotorpointServiceService {
       "objectName": "myCustomer",
       "get": [
         "Customer::default_contact_id",
+        "Memberships",
         "Contacts"
       ]
     };
@@ -173,10 +174,12 @@ export class MotorpointServiceService {
   };
 
   checkValidAuth(object) {
-    if(object.errorCode == 6)
+    if(object.errorCode == 6 || object.errorCode == 99)
     {
       this.clearAndLogout();
+      return false;
     }
+    return true;
   }
 
   clearAndLogout() {
